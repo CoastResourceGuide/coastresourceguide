@@ -1,0 +1,22 @@
+[
+  { "name": "Astoria", "county": "Clatsop", "incorporated": true },
+  { "name": "Cannon Beach", "county": "Clatsop", "incorporated": true },
+  { "name": "Gearhart", "county": "Clatsop", "incorporated": true },
+  { "name": "Seaside", "county": "Clatsop", "incorporated": true },
+  { "name": "Warrenton", "county": "Clatsop", "incorporated": true },
+  { "name": "Arch Cape", "county": "Clatsop", "incorporated": false },
+  { "name": "Brownsmead", "county": "Clatsop", "incorporated": false },
+  { "name": "Knappa", "county": "Clatsop", "incorporated": false },
+  { "name": "Svensen", "county": "Clatsop", "incorporated": false },
+  { "name": "Tillamook", "county": "Tillamook", "incorporated": true },
+  { "name": "Bay City", "county": "Tillamook", "incorporated": true },
+  { "name": "Garibaldi", "county": "Tillamook", "incorporated": true },
+  { "name": "Manzanita", "county": "Tillamook", "incorporated": true },
+  { "name": "Nehalem", "county": "Tillamook", "incorporated": true },
+  { "name": "Rockaway Beach", "county": "Tillamook", "incorporated": true },
+  { "name": "Wheeler", "county": "Tillamook", "incorporated": true },
+  { "name": "Cloverdale", "county": "Tillamook", "incorporated": false },
+  { "name": "Pacific City", "county": "Tillamook", "incorporated": false },
+  { "name": "Netarts", "county": "Tillamook", "incorporated": false },
+  { "name": "Oceanside", "county": "Tillamook", "incorporated": false }
+]
