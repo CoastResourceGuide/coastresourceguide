@@ -1,0 +1,4 @@
+Sitemap: https://coastresourceguide.org/sitemap.xml
+
+User-agent: *
+Allow: /
