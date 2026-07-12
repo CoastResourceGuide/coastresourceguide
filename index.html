@@ -75,83 +75,41 @@
     <script src="https://unpkg.com/lucide@0.344.0"></script>
 
     <style>
-        /* Base */
         html { scroll-behavior: smooth; }
         body { background-color: #f8fafc; }
-
-        /* Typography: modern text-wrap */
         h1, h2, h3 { text-wrap: pretty; }
-
-        /* Custom Scrollbar with fallback */
-        .custom-scrollbar {
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-        }
+        .custom-scrollbar { overflow-y: auto; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-
-        /* Map Overrides */
         .leaflet-popup-content-wrapper { border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 0; overflow: hidden; }
         .leaflet-popup-content { font-family: 'Inter', sans-serif; margin: 0; width: 280px !important; }
         .leaflet-container { z-index: 10; font-family: 'Inter', sans-serif; }
         .marker-cluster-custom { background-color: rgba(14, 165, 233, 0.6); }
         .marker-cluster-custom div { background-color: rgba(2, 132, 199, 0.9); color: white; font-weight: bold; }
-
-        /* Native Dialog Styling with backdrop-filter fallback */
-        dialog::backdrop {
-            background: rgba(15, 23, 42, 0.85);
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(4px);
-        }
+        dialog::backdrop { background: rgba(15, 23, 42, 0.85); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
         dialog[open] { display: flex; flex-direction: column; }
-        
-        /* Mobile Menu Transitions */
         #mobile-filter-menu { transition: transform 0.3s ease-in-out; }
         .translate-x-full { transform: translateX(100%); }
         .translate-x-0 { transform: translateX(0); }
-
-        /* Line Clamp: standard with legacy fallback (prefixed first, standard last) */
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            line-clamp: 3;
-            overflow: hidden;
-        }
-
-        /* Performance: content-visibility for off-screen cards */
-        #list-container > li {
-            content-visibility: auto;
-            contain-intrinsic-size: auto 400px;
-        }
-
-        /* Reduced Motion */
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; line-clamp: 3; overflow: hidden; }
+        #list-container > li { content-visibility: auto; contain-intrinsic-size: auto 400px; }
         @media (prefers-reduced-motion: reduce) {
-            *, ::before, ::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+            *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
             html { scroll-behavior: auto; }
         }
     </style>
 </head>
 <body class="text-slate-800 font-sans min-h-screen flex flex-col antialiased bg-slate-50">
     
-    <!-- TAILWIND SAFELIST -->
     <div class="hidden bg-emerald-50 border-emerald-200 text-emerald-700 bg-blue-50 border-blue-200 text-blue-700 bg-amber-50 border-amber-200 text-amber-700 bg-rose-50 border-rose-200 text-rose-700 bg-purple-50 border-purple-200 text-purple-700 bg-red-50 border-red-200 text-red-700 bg-slate-50 border-slate-200 text-slate-700 bg-indigo-50 border-indigo-200 text-indigo-700 text-rose-600 fill-rose-600"></div>
 
-    <!-- Accessibility Skip Link -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-sky-700 font-bold shadow-md rounded-br-lg">Skip to main content</a>
 
-    <!-- Error Banner -->
     <div id="error-banner" class="hidden bg-rose-600 text-white text-center py-2 px-4 text-sm font-medium" role="alert" aria-live="assertive">
         Failed to load directory data. Please check your connection and refresh the page.
     </div>
 
-    <!-- Navigation -->
     <nav class="bg-sky-950 shadow-md sticky top-0 z-40" aria-label="Main Navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <a href="/" id="logo-link" class="flex items-center gap-2 group outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-sky-950 rounded-lg p-1 text-white">
@@ -168,40 +126,25 @@
         </div>
     </nav>
 
-    <!-- Hero / Search -->
     <header class="bg-sky-950 pb-16 pt-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div class="max-w-3xl mx-auto relative z-10 text-center">
             <h1 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">Find Help on the North Coast</h1>
-            <p class="text-white/90 mb-8 md:text-lg font-medium">Connecting Tillamook & Clatsop Counties to essential community resources.</p>
-            
-            <form role="search" onsubmit="return false;" class="relative max-w-2xl mx-auto">
-                <label for="global-search" class="sr-only">Search resources, categories, or keywords</label>
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <span data-lucide="search" class="h-5 w-5 text-gray-500" aria-hidden="true"></span>
-                </div>
-                <input type="search" id="global-search" spellcheck="false" placeholder="Search for food, shelter, legal aid, mental health..." 
-                    class="block w-full pl-11 pr-4 py-4 rounded-2xl text-gray-900 text-lg placeholder-gray-500 border-2 border-transparent focus:border-sky-500 focus:ring-2 focus:ring-sky-500 shadow-lg transition-all outline-none" autocomplete="off">
-            </form>
+            <p class="text-white/90 mb-4 md:text-lg font-medium">Connecting Tillamook & Clatsop Counties to essential community resources.</p>
         </div>
     </header>
 
-    <!-- Category Grid -->
     <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20 mb-8" aria-label="Browse Categories">
         <div class="bg-white rounded-[1.25rem] shadow-card p-6 md:p-8 border border-slate-100">
             <h2 class="text-slate-800 font-bold text-xl mb-6 flex items-center gap-2">
                 <span data-lucide="grid" class="w-6 h-6 text-slate-800" aria-hidden="true"></span> Browse Categories
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="quick-categories">
-                <!-- Populated dynamically by JS -->
-            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="quick-categories"></div>
         </div>
     </section>
 
-    <!-- Main Application Area -->
     <main id="main-content" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-8">
         
-        <!-- Desktop Sidebar Filters -->
         <aside class="hidden lg:flex w-72 flex-col gap-6 sticky top-24 h-max max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar pr-2" aria-label="Filters">
             <div class="flex items-center justify-between">
                 <h2 class="font-bold text-lg text-slate-800">Filters</h2>
@@ -239,17 +182,13 @@
                     <legend class="font-semibold text-slate-800 mb-4 flex items-center gap-2 w-full border-b pb-2">
                         <span data-lucide="layers" class="w-4 h-4 text-sky-600" aria-hidden="true"></span> Service Type
                     </legend>
-                    <div id="category-filters" class="space-y-3 mt-2">
-                        <!-- Populated dynamically -->
-                    </div>
+                    <div id="category-filters" class="space-y-3 mt-2"></div>
                 </fieldset>
             </form>
         </aside>
 
-        <!-- Content Area -->
         <div class="w-full lg:flex-1 flex flex-col">
             
-            <!-- Toolbar -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 lg:static lg:z-auto">
                 <button id="mobile-filter-trigger" aria-haspopup="dialog" aria-expanded="false" class="lg:hidden px-4 py-2 bg-slate-100 text-slate-800 rounded-xl font-medium text-sm flex items-center gap-2 hover:bg-slate-200 transition-colors focus:ring-2 focus:ring-sky-500 outline-none">
                     <span data-lucide="sliders-horizontal" class="w-4 h-4" aria-hidden="true"></span> Filters
@@ -269,30 +208,24 @@
                 </div>
             </div>
 
-            <!-- List View -->
             <section aria-label="Search results" id="list-view-section">
-                <ul id="list-container" class="grid grid-cols-1 md:grid-cols-2 gap-5 m-0 p-0 list-none" style="container-type: inline-size; container-name: card-grid;">
-                    <!-- Cards injected here -->
-                </ul>
+                <ul id="list-container" class="grid grid-cols-1 md:grid-cols-2 gap-5 m-0 p-0 list-none" style="container-type: inline-size; container-name: card-grid;"></ul>
                 <div id="load-more-sentinel" class="h-10 w-full mt-4"></div>
             </section>
 
-            <!-- Map View -->
             <div id="map-container" class="hidden w-full h-[650px] rounded-2xl shadow-card border border-slate-200 z-10 overflow-hidden relative" aria-label="Interactive map of resources"></div>
 
-            <!-- Empty State -->
             <div id="empty-state" class="hidden flex-col items-center justify-center py-20 px-4 text-center bg-white rounded-2xl border border-slate-200 shadow-sm mt-4">
                 <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                     <span data-lucide="search-x" class="w-10 h-10 text-slate-400" aria-hidden="true"></span>
                 </div>
                 <h3 class="text-xl font-bold text-slate-800 mb-2">No resources match your criteria</h3>
-                <p class="text-slate-600 max-w-md mb-6">Try broadening your search, selecting "Both Counties", or clearing your selected categories.</p>
+                <p class="text-slate-600 max-w-md mb-6">Try broadening your search or clearing your selected categories.</p>
                 <button id="empty-clear-btn" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-medium transition-colors focus:ring-2 focus:ring-sky-500 outline-none">Clear All Filters</button>
             </div>
         </div>
     </main>
 
-    <!-- Mobile Filter Menu Dialog -->
     <dialog id="mobile-filter-menu" role="dialog" aria-labelledby="mobile-filter-title" class="bg-transparent m-0 h-full max-h-full w-full max-w-sm ml-auto p-0 backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm open:flex flex-col transform transition-transform duration-300 translate-x-full" inert>
         <div class="bg-white h-full w-full shadow-2xl flex flex-col">
             <div class="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-surface">
@@ -305,7 +238,6 @@
                     </button>
                 </form>
             </div>
-            
             <div class="p-4 overflow-y-auto flex-grow bg-white">
                 <fieldset class="mb-8">
                     <legend class="font-semibold text-slate-800 mb-3 border-b pb-2 w-full">Location</legend>
@@ -315,7 +247,6 @@
                         <option value="All">All Communities</option>
                     </select>
                 </fieldset>
-
                 <fieldset>
                     <legend class="font-semibold text-slate-800 mb-3 border-b pb-2 flex justify-between items-center w-full">
                         <span>Service Type</span>
@@ -324,16 +255,12 @@
                     <div id="mobile-category-filters" class="space-y-3 mt-2"></div>
                 </fieldset>
             </div>
-            
             <div class="p-4 border-t border-slate-100 bg-surface">
-                <button id="apply-mobile-filters" type="button" class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold shadow-sm flex justify-center items-center gap-2 transition-colors focus:ring-2 focus:ring-sky-500 outline-none">
-                    Show Results
-                </button>
+                <button id="apply-mobile-filters" type="button" class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold shadow-sm flex justify-center items-center gap-2 transition-colors focus:ring-2 focus:ring-sky-500 outline-none">Show Results</button>
             </div>
         </div>
     </dialog>
 
-    <!-- Resource Detail Modal Dialog -->
     <dialog id="resource-modal" role="dialog" aria-labelledby="modal-name" class="bg-transparent m-auto p-4 w-full max-w-3xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm open:flex flex-col">
         <div class="bg-white w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-start bg-slate-50 relative">
@@ -350,62 +277,41 @@
                     </button>
                 </form>
             </div>
-            
             <div class="p-6 overflow-y-auto custom-scrollbar flex-grow bg-white text-slate-700">
                 <p id="modal-desc" class="text-base leading-relaxed mb-6 text-slate-700"></p>
                 <div id="modal-socials" class="mb-8"></div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="bg-sky-50 rounded-2xl p-5 border border-sky-100">
-                        <h3 class="text-sm font-bold text-sky-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span data-lucide="contact" class="w-4 h-4" aria-hidden="true"></span> Contact Info
-                        </h3>
+                        <h3 class="text-sm font-bold text-sky-900 uppercase tracking-wider mb-4 flex items-center gap-2"><span data-lucide="contact" class="w-4 h-4" aria-hidden="true"></span> Contact Info</h3>
                         <div id="modal-contact" class="space-y-3 text-sm"></div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></span> Location
-                        </h3>
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2"><span data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></span> Location</h3>
                         <p id="modal-address" class="text-sm mb-3 font-medium text-slate-800"></p>
-                        <a id="modal-directions" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm bg-white border border-slate-300 px-4 py-2 rounded-lg font-medium text-slate-800 hover:bg-slate-50 hover:text-sky-700 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none">
-                            <span data-lucide="map" class="w-4 h-4" aria-hidden="true"></span> Get Directions
-                        </a>
+                        <a id="modal-directions" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm bg-white border border-slate-300 px-4 py-2 rounded-lg font-medium text-slate-800 hover:bg-slate-50 hover:text-sky-700 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none"><span data-lucide="map" class="w-4 h-4" aria-hidden="true"></span> Get Directions</a>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <span data-lucide="clock" class="w-4 h-4" aria-hidden="true"></span> Hours of Operation
-                        </h3>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span data-lucide="clock" class="w-4 h-4" aria-hidden="true"></span> Hours of Operation</h3>
                         <p id="modal-hours" class="text-sm font-medium text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100"></p>
                     </div>
                     <div>
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <span data-lucide="users" class="w-4 h-4" aria-hidden="true"></span> Eligibility & Notes
-                        </h3>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span data-lucide="users" class="w-4 h-4" aria-hidden="true"></span> Eligibility & Notes</h3>
                         <p id="modal-eligibility" class="text-sm font-medium text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100"></p>
                     </div>
                 </div>
             </div>
-            
             <div class="px-6 py-4 border-t border-slate-100 bg-surface flex flex-wrap items-center justify-between gap-4">
-                <button id="modal-share" type="button" class="px-4 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none inline-flex items-center gap-2">
-                    <span data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></span> Share
-                </button>
+                <button id="modal-share" type="button" class="px-4 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none inline-flex items-center gap-2"><span data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></span> Share</button>
                 <div class="flex items-center gap-3 ml-auto">
-                    <button id="modal-fav" type="button" class="px-4 py-2.5 bg-rose-50 text-rose-600 text-sm font-semibold rounded-xl hover:bg-rose-100 transition-colors shadow-sm focus:ring-2 focus:ring-rose-500 outline-none inline-flex items-center gap-2">
-                        <span data-lucide="heart" class="w-4 h-4" aria-hidden="true"></span> Save
-                    </button>
-                    <form method="dialog">
-                        <button class="px-6 py-2.5 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none">Close</button>
-                    </form>
+                    <button id="modal-fav" type="button" class="px-4 py-2.5 bg-rose-50 text-rose-600 text-sm font-semibold rounded-xl hover:bg-rose-100 transition-colors shadow-sm focus:ring-2 focus:ring-rose-500 outline-none inline-flex items-center gap-2"><span data-lucide="heart" class="w-4 h-4" aria-hidden="true"></span> Save</button>
+                    <form method="dialog"><button class="px-6 py-2.5 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition-colors shadow-sm focus:ring-2 focus:ring-sky-500 outline-none">Close</button></form>
                 </div>
             </div>
         </div>
     </dialog>
 
-    <!-- Footer -->
     <footer id="about" class="bg-slate-900 text-slate-300 mt-auto py-12 border-t-4 border-sky-600">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
             <div>
@@ -422,126 +328,46 @@
             <div>
                 <h2 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Maintain This Guide</h2>
                 <p class="mb-2 flex items-center gap-2"><span data-lucide="calendar" class="w-4 h-4 text-slate-500" aria-hidden="true"></span> Data last updated: <span id="last-updated-date" class="font-medium text-white">...</span></p>
-                <a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none">
-                    <span data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></span> Submit a correction
-                </a>
+                <a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none"><span data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></span> Submit a correction</a>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin="" defer></script>
 
     <script type="module">
-        // ==========================================
-        // MODULE: UTILS
-        // ==========================================
         const Utils = {
             escapeHTML: (str) => {
                 if (!str) return '';
-                return String(str).replace(/[&<>"']/g, c => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#39;'
-                }[c]));
+                return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
             },
             isValidUrl: (url) => {
                 if (!url) return false;
-                try {
-                    const parsed = new URL(url);
-                    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-                } catch (e) {
-                    return false;
-                }
+                try { const p = new URL(url); return p.protocol === 'http:' || p.protocol === 'https:'; } catch (e) { return false; }
             },
-            debounce: (func, wait) => {
-                let timeout;
-                return function (...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func(...args), wait);
-                };
-            }
+            debounce: (func, wait) => { let t; return function (...a) { clearTimeout(t); t = setTimeout(() => func(...a), wait); }; }
         };
 
-        // ==========================================
-        // MODULE: STATE & DATA
-        // ==========================================
         const State = {
-            resources: [],
-            cities: [],
-            filters: { county: 'All', city: 'All', categories: new Set(), search: '', showFavorites: false },
+            resources: [], cities: [],
+            filters: { county: 'All', city: 'All', categories: new Set(), showFavorites: false },
             favorites: new Set(JSON.parse(localStorage.getItem('coast_guide_favs') || '[]')),
-            view: 'list',
-            lastRenderedCount: 0,
-            filteredResources: [],
-            lastFocusedElement: null
+            view: 'list', lastRenderedCount: 0, filteredResources: [], lastFocusedElement: null
         };
 
         const DataManager = {
-            validateAndIndex: (data) => {
-                return data.resources
-                    .filter(r => r.id && r.name && r.description)
-                    .map(r => {
-                        r.searchIndex = `${r.name} ${r.description} ${r.city} ${r.categories.join(' ')}`.toLowerCase();
-                        return r;
-                    });
-            },
-            toggleFavorite: (id) => {
-                if (State.favorites.has(id)) {
-                    State.favorites.delete(id);
-                } else {
-                    State.favorites.add(id);
-                }
-                localStorage.setItem('coast_guide_favs', JSON.stringify([...State.favorites]));
-                App.updateFavoritesUI();
-            }
+            validateAndIndex: (data) => data.resources.filter(r => r.id && r.name && r.description).map(r => { r.searchIndex = `${r.name} ${r.description} ${r.city} ${r.categories.join(' ')}`.toLowerCase(); return r; }),
+            toggleFavorite: (id) => { State.favorites.has(id) ? State.favorites.delete(id) : State.favorites.add(id); localStorage.setItem('coast_guide_favs', JSON.stringify([...State.favorites])); App.updateFavoritesUI(); }
         };
 
-        // ==========================================
-        // MODULE: SEO
-        // ==========================================
         const SEO = {
             injectStructuredData: (resources) => {
-                const itemList = resources.map((res, index) => ({
-                    "@type": "ListItem",
-                    "position": index + 1,
-                    "item": {
-                        "@type": res.categories.includes("Health & Medical") ? "MedicalOrganization" : "Organization",
-                        "name": res.name,
-                        "description": res.description,
-                        "url": res.website || "",
-                        "telephone": res.phone || "",
-                        "address": {
-                            "@type": "PostalAddress",
-                            "streetAddress": res.address || "",
-                            "addressLocality": res.city,
-                            "addressRegion": "OR"
-                        },
-                        "geo": (res.lat && res.lng) ? {
-                            "@type": "GeoCoordinates",
-                            "latitude": res.lat,
-                            "longitude": res.lng
-                        } : undefined
-                    }
-                }));
-
-                const script = document.createElement('script');
-                script.type = 'application/ld+json';
-                script.textContent = JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "ItemList",
-                    "itemListElement": itemList
-                });
-                document.head.appendChild(script);
+                const items = resources.map((res, i) => ({ "@type": "ListItem", "position": i + 1, "item": { "@type": res.categories.includes("Health & Medical") ? "MedicalOrganization" : "Organization", "name": res.name, "description": res.description, "url": res.website || "", "telephone": res.phone || "", "address": { "@type": "PostalAddress", "streetAddress": res.address || "", "addressLocality": res.city, "addressRegion": "OR" }, "geo": (res.lat && res.lng) ? { "@type": "GeoCoordinates", "latitude": res.lat, "longitude": res.lng } : undefined } }));
+                const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", "itemListElement": items }); document.head.appendChild(s);
             }
         };
 
-        // ==========================================
-        // MODULE: UI RENDERER
-        // ==========================================
         const Renderer = {
             CATEGORIES_CONFIG: [
                 { name: "Food & Meals", icon: "utensils", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200" },
@@ -553,681 +379,93 @@
                 { name: "Legal Aid", icon: "scale", color: "text-slate-700", bg: "bg-slate-50", border: "border-slate-200" },
                 { name: "Employment", icon: "briefcase", color: "text-indigo-700", bg: "bg-indigo-50", border: "border-indigo-200" }
             ],
-
-            getStyle: (catName) => {
-                return Renderer.CATEGORIES_CONFIG.find(c => c.name === catName) || {
-                    icon: "circle",
-                    color: "text-slate-600",
-                    bg: "bg-slate-100",
-                    border: "border-slate-200"
-                };
-            },
-
-            generateSocialHtml: (socials) => {
-                if (!socials || Object.keys(socials).length === 0) {
-                    return '';
-                }
-                let html = '<div class="flex gap-4 mt-4">';
-                const supportedIcons = ['facebook', 'instagram', 'twitter', 'linkedin', 'youtube'];
-                for (const [platform, url] of Object.entries(socials)) {
-                    if (Utils.isValidUrl(url)) {
-                        const icon = supportedIcons.includes(platform.toLowerCase()) ? platform.toLowerCase() : 'link-2';
-                        html += `<a href="${Utils.escapeHTML(url)}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-sky-600 transition-colors outline-none focus:ring-2 focus:ring-sky-500 rounded p-1" aria-label="Visit ${Utils.escapeHTML(platform)} page"><span data-lucide="${icon}" class="w-5 h-5" aria-hidden="true"></span></a>`;
-                    }
-                }
-                return html + '</div>';
-            },
-
+            getStyle: (n) => Renderer.CATEGORIES_CONFIG.find(c => c.name === n) || { icon: "circle", color: "text-slate-600", bg: "bg-slate-100", border: "border-slate-200" },
+            generateSocialHtml: (s) => { if (!s || !Object.keys(s).length) return ''; let h = '<div class="flex gap-4 mt-4">'; const icons = ['facebook','instagram','twitter','linkedin','youtube']; for (const [p, u] of Object.entries(s)) { if (Utils.isValidUrl(u)) { const i = icons.includes(p.toLowerCase()) ? p.toLowerCase() : 'link-2'; h += `<a href="${Utils.escapeHTML(u)}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-sky-600 transition-colors outline-none focus:ring-2 focus:ring-sky-500 rounded p-1" aria-label="Visit ${Utils.escapeHTML(p)} page"><span data-lucide="${i}" class="w-5 h-5" aria-hidden="true"></span></a>`; } } return h + '</div>'; },
             createCardHTML: (res) => {
-                const badgesHtml = res.categories.slice(0, 2).map(c => {
-                    const style = Renderer.getStyle(c);
-                    return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold ${style.bg} ${style.color} border ${style.border}">
-                                <span data-lucide="${style.icon}" class="w-3 h-3" aria-hidden="true"></span> ${Utils.escapeHTML(c)}
-                            </span>`;
-                }).join('');
-
-                const isFav = State.favorites.has(res.id);
-                const favColor = isFav ? 'text-rose-600 fill-rose-600' : 'text-slate-400';
-
-                let actionsHtml = '';
-                if (res.phone) {
-                    actionsHtml += `<a href="tel:${Utils.escapeHTML(res.phone)}" class="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 font-medium text-sm rounded-lg transition-colors outline-none focus:ring-2 focus:ring-sky-500"><span data-lucide="phone" class="w-4 h-4" aria-hidden="true"></span> Call</a>`;
-                }
-                if (Utils.isValidUrl(res.website)) {
-                    actionsHtml += `<a href="${Utils.escapeHTML(res.website)}" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 font-medium text-sm rounded-lg transition-colors outline-none focus:ring-2 focus:ring-sky-500"><span data-lucide="external-link" class="w-4 h-4" aria-hidden="true"></span> Web</a>`;
-                }
-
-                return `
-                    <li class="bg-white rounded-[1.25rem] shadow-card hover:shadow-card-hover border border-slate-100 p-5 flex flex-col h-full transition-all duration-200">
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-start mb-3">
-                                <div class="flex flex-wrap gap-2">${badgesHtml}</div>
-                                <button type="button" data-action="toggle-fav" data-id="${Utils.escapeHTML(res.id)}" class="p-1 rounded-full hover:bg-slate-50 transition outline-none focus:ring-2 focus:ring-sky-500" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}">
-                                    <span data-lucide="heart" class="w-5 h-5 ${favColor} transition-colors" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                            <h3 class="font-serif text-lg font-bold text-slate-800 leading-tight mb-2">${Utils.escapeHTML(res.name)}</h3>
-                            <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 uppercase tracking-wide mb-3">
-                                <span data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-600" aria-hidden="true"></span>
-                                ${Utils.escapeHTML(res.city)}, ${Utils.escapeHTML(res.county)} Co. ${res.regionWide ? '<span class="text-amber-700 ml-1">(Region-Wide)</span>' : ''}
-                            </div>
-                            <p class="text-sm text-slate-700 line-clamp-3 leading-relaxed mb-4">${Utils.escapeHTML(res.description)}</p>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
-                            <div class="flex w-full sm:w-auto gap-2">${actionsHtml}</div>
-                            <button type="button" data-action="open-modal" data-id="${Utils.escapeHTML(res.id)}" class="w-full sm:w-auto px-4 py-2.5 text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-xl transition-colors inline-flex justify-center items-center gap-1.5 outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-                                <span class="sr-only">View details for ${Utils.escapeHTML(res.name)}</span>
-                                <span aria-hidden="true">View Details</span> <span data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </li>
-                `;
+                const badges = res.categories.slice(0,2).map(c => { const st = Renderer.getStyle(c); return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold ${st.bg} ${st.color} border ${st.border}"><span data-lucide="${st.icon}" class="w-3 h-3" aria-hidden="true"></span> ${Utils.escapeHTML(c)}</span>`; }).join('');
+                const isFav = State.favorites.has(res.id), favC = isFav ? 'text-rose-600 fill-rose-600' : 'text-slate-400';
+                let acts = '';
+                if (res.phone) acts += `<a href="tel:${Utils.escapeHTML(res.phone)}" class="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 font-medium text-sm rounded-lg transition-colors outline-none focus:ring-2 focus:ring-sky-500"><span data-lucide="phone" class="w-4 h-4" aria-hidden="true"></span> Call</a>`;
+                if (Utils.isValidUrl(res.website)) acts += `<a href="${Utils.escapeHTML(res.website)}" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 font-medium text-sm rounded-lg transition-colors outline-none focus:ring-2 focus:ring-sky-500"><span data-lucide="external-link" class="w-4 h-4" aria-hidden="true"></span> Web</a>`;
+                return `<li class="bg-white rounded-[1.25rem] shadow-card hover:shadow-card-hover border border-slate-100 p-5 flex flex-col h-full transition-all duration-200"><div class="flex-grow"><div class="flex justify-between items-start mb-3"><div class="flex flex-wrap gap-2">${badges}</div><button type="button" data-action="toggle-fav" data-id="${Utils.escapeHTML(res.id)}" class="p-1 rounded-full hover:bg-slate-50 transition outline-none focus:ring-2 focus:ring-sky-500" aria-label="${isFav?'Remove from favorites':'Add to favorites'}"><span data-lucide="heart" class="w-5 h-5 ${favC} transition-colors" aria-hidden="true"></span></button></div><h3 class="font-serif text-lg font-bold text-slate-800 leading-tight mb-2">${Utils.escapeHTML(res.name)}</h3><div class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 uppercase tracking-wide mb-3"><span data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-600" aria-hidden="true"></span>${Utils.escapeHTML(res.city)}, ${Utils.escapeHTML(res.county)} Co. ${res.regionWide?'<span class="text-amber-700 ml-1">(Region-Wide)</span>':''}</div><p class="text-sm text-slate-700 line-clamp-3 leading-relaxed mb-4">${Utils.escapeHTML(res.description)}</p></div><div class="mt-auto pt-4 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3"><div class="flex w-full sm:w-auto gap-2">${acts}</div><button type="button" data-action="open-modal" data-id="${Utils.escapeHTML(res.id)}" class="w-full sm:w-auto px-4 py-2.5 text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-xl transition-colors inline-flex justify-center items-center gap-1.5 outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"><span class="sr-only">View details for ${Utils.escapeHTML(res.name)}</span><span aria-hidden="true">View Details</span> <span data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></span></button></div></li>`;
             },
-
-            renderChunk: (resources, startIndex, chunkSize) => {
-                const container = document.getElementById('list-container');
-                if (!container) return;
-                const chunk = resources.slice(startIndex, startIndex + chunkSize);
-                container.insertAdjacentHTML('beforeend', chunk.map(Renderer.createCardHTML).join(''));
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-                State.lastRenderedCount += chunk.length;
-            }
+            renderChunk: (r, s, c) => { const co = document.getElementById('list-container'); if (!co) return; co.insertAdjacentHTML('beforeend', r.slice(s, s+c).map(Renderer.createCardHTML).join('')); if (window.lucide) window.lucide.createIcons(); State.lastRenderedCount += r.slice(s, s+c).length; }
         };
 
-        // ==========================================
-        // MODULE: MAP
-        // ==========================================
         const MapModule = {
-            instance: null,
-            cluster: null,
-            markers: new Map(),
-
-            init: () => {
-                if (MapModule.instance) return;
-                MapModule.instance = L.map('map-container', { zoomControl: false }).setView([45.8, -123.9], 9);
-                L.control.zoom({ position: 'bottomright' }).addTo(MapModule.instance);
-
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://osm.org/copyright">OSM</a>'
-                }).addTo(MapModule.instance);
-
-                MapModule.cluster = L.markerClusterGroup({
-                    showCoverageOnHover: false,
-                    maxClusterRadius: 40,
-                    iconCreateFunction: (c) => L.divIcon({
-                        html: `<div><span>${c.getChildCount()}</span></div>`,
-                        className: 'marker-cluster marker-cluster-custom',
-                        iconSize: L.point(40, 40)
-                    })
-                });
-                MapModule.instance.addLayer(MapModule.cluster);
-
-                for (const res of State.resources) {
-                    if (res.lat && res.lng) {
-                        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0284c7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-md"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3" fill="white"></circle></svg>`;
-                        const icon = L.divIcon({
-                            className: 'bg-transparent',
-                            html: svg,
-                            iconSize: [32, 32],
-                            iconAnchor: [16, 32],
-                            popupAnchor: [0, -32]
-                        });
-                        const marker = L.marker([res.lat, res.lng], { icon });
-                        marker.options.resourceId = res.id;
-
-                        marker.bindPopup(`
-                            <div class="p-4">
-                                <h4 class="font-serif font-bold text-slate-800 text-base mb-1">${Utils.escapeHTML(res.name)}</h4>
-                                <p class="text-xs font-semibold text-sky-700 uppercase mb-3">${Utils.escapeHTML(res.city)}</p>
-                                <button type="button" data-action="open-modal" data-id="${Utils.escapeHTML(res.id)}" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition-colors text-sm focus:ring-2 focus:ring-sky-500 outline-none">View Full Details</button>
-                            </div>
-                        `);
-                        MapModule.markers.set(res.id, marker);
-                    }
-                }
-            },
-
-            updateVisibility: (filteredResources) => {
-                if (!MapModule.instance) return;
-                const activeIds = new Set(filteredResources.map(r => r.id));
-                const layersToRemove = [];
-
-                MapModule.cluster.eachLayer(layer => {
-                    if (!activeIds.has(layer.options.resourceId)) {
-                        layersToRemove.push(layer);
-                    }
-                });
-
-                if (layersToRemove.length) {
-                    MapModule.cluster.removeLayers(layersToRemove);
-                }
-
-                for (const id of activeIds) {
-                    const marker = MapModule.markers.get(id);
-                    if (marker && !MapModule.cluster.hasLayer(marker)) {
-                        MapModule.cluster.addLayer(marker);
-                    }
-                }
-
-                const validCoords = filteredResources
-                    .filter(r => r.lat && r.lng)
-                    .map(r => [r.lat, r.lng]);
-
-                if (validCoords.length > 0 && State.view === 'map') {
-                    setTimeout(() => {
-                        MapModule.instance.invalidateSize();
-                        MapModule.instance.fitBounds(validCoords, { padding: [50, 50], maxZoom: 13 });
-                    }, 50);
-                }
-            }
+            instance: null, cluster: null, markers: new Map(),
+            init: () => { if (MapModule.instance) return; MapModule.instance = L.map('map-container',{zoomControl:false}).setView([45.8,-123.9],9); L.control.zoom({position:'bottomright'}).addTo(MapModule.instance); L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://osm.org/copyright">OSM</a>'}).addTo(MapModule.instance); MapModule.cluster = L.markerClusterGroup({showCoverageOnHover:false,maxClusterRadius:40,iconCreateFunction:(c)=>L.divIcon({html:`<div><span>${c.getChildCount()}</span></div>`,className:'marker-cluster marker-cluster-custom',iconSize:L.point(40,40)})}); MapModule.instance.addLayer(MapModule.cluster); for (const res of State.resources) { if (res.lat && res.lng) { const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0284c7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-md"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3" fill="white"></circle></svg>`; const icon = L.divIcon({className:'bg-transparent',html:svg,iconSize:[32,32],iconAnchor:[16,32],popupAnchor:[0,-32]}); const m = L.marker([res.lat,res.lng],{icon}); m.options.resourceId = res.id; m.bindPopup(`<div class="p-4"><h4 class="font-serif font-bold text-slate-800 text-base mb-1">${Utils.escapeHTML(res.name)}</h4><p class="text-xs font-semibold text-sky-700 uppercase mb-3">${Utils.escapeHTML(res.city)}</p><button type="button" data-action="open-modal" data-id="${Utils.escapeHTML(res.id)}" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition-colors text-sm focus:ring-2 focus:ring-sky-500 outline-none">View Full Details</button></div>`); MapModule.markers.set(res.id, m); } } },
+            updateVisibility: (fr) => { if (!MapModule.instance) return; const aIds = new Set(fr.map(r=>r.id)), rem = []; MapModule.cluster.eachLayer(l=>{if(!aIds.has(l.options.resourceId)) rem.push(l);}); if (rem.length) MapModule.cluster.removeLayers(rem); for (const id of aIds) { const m = MapModule.markers.get(id); if (m && !MapModule.cluster.hasLayer(m)) MapModule.cluster.addLayer(m); } const coords = fr.filter(r=>r.lat&&r.lng).map(r=>[r.lat,r.lng]); if (coords.length && State.view==='map') { setTimeout(()=>{MapModule.instance.invalidateSize();MapModule.instance.fitBounds(coords,{padding:[50,50],maxZoom:13});},50); } }
         };
 
-        // ==========================================
-        // MODULE: APP CONTROLLER
-        // ==========================================
         const App = {
             init: async () => {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('service-worker.js').catch(e => {
-                        console.warn('Service Worker registration failed:', e);
-                    });
-                }
-
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(e => console.warn('SW:', e));
                 try {
-                    const [resResponse, cityResponse] = await Promise.all([
-                        fetch('data/resources.json'),
-                        fetch('data/cities.json')
-                    ]);
-                    if (!resResponse.ok || !cityResponse.ok) {
-                        throw new Error("Failed to fetch data");
-                    }
-
-                    const resData = await resResponse.json();
-                    State.resources = DataManager.validateAndIndex(resData);
-                    State.cities = await cityResponse.json();
-
-                    const CACHE_KEY = 'crg_last_commit';
-                    const CACHE_TIME_KEY = 'crg_last_commit_time';
-                    const CACHE_DURATION = 60 * 60 * 1000;
-
-                    async function getLastCommitDate() {
-                        const cached = localStorage.getItem(CACHE_KEY);
-                        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-                        if (cached && cachedTime && (Date.now() - parseInt(cachedTime, 10)) < CACHE_DURATION) {
-                            return cached;
-                        }
-                        try {
-                            const ghResponse = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1');
-                            if (ghResponse.ok) {
-                                const commits = await ghResponse.json();
-                                if (commits.length > 0) {
-                                    const commitDate = new Date(commits[0].commit.committer.date);
-                                    const formatted = commitDate.toLocaleDateString('en-US', {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        year: 'numeric',
-                                        hour: 'numeric',
-                                        minute: '2-digit',
-                                        hour12: true,
-                                        timeZone: 'America/Los_Angeles'
-                                    }) + ' PST';
-                                    localStorage.setItem(CACHE_KEY, formatted);
-                                    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-                                    return formatted;
-                                }
-                            }
-                        } catch (e) {
-                            console.warn('GitHub API unavailable, using fallback date');
-                        }
-                        return null;
-                    }
-
-                    const commitDate = await getLastCommitDate();
-                    const dateEl = document.getElementById('last-updated-date');
-                    if (dateEl) {
-                        dateEl.textContent = commitDate || Utils.escapeHTML(resData.lastUpdated);
-                    }
-
+                    const [rr, cr] = await Promise.all([fetch('data/resources.json'), fetch('data/cities.json')]);
+                    if (!rr.ok || !cr.ok) throw new Error("Fetch failed");
+                    const rd = await rr.json(); State.resources = DataManager.validateAndIndex(rd); State.cities = await cr.json();
+                    const CK = 'crg_last_commit', CTK = 'crg_last_commit_time', CD = 3600000;
+                    async function gcd() { const c = localStorage.getItem(CK), ct = localStorage.getItem(CTK); if (c && ct && (Date.now()-parseInt(ct,10))<CD) return c; try { const gr = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1'); if (gr.ok) { const gc = await gr.json(); if (gc.length) { const f = new Date(gc[0].commit.committer.date).toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'America/Los_Angeles'})+' PST'; localStorage.setItem(CK,f); localStorage.setItem(CTK,Date.now().toString()); return f; } } } catch(e){} return null; }
+                    const cd = await gcd(); const de = document.getElementById('last-updated-date'); if (de) de.textContent = cd || Utils.escapeHTML(rd.lastUpdated);
                     SEO.injectStructuredData(State.resources);
-                } catch (e) {
-                    console.error("Failed to load live data:", e);
-                    const banner = document.getElementById('error-banner');
-                    if (banner) {
-                        banner.classList.remove('hidden');
-                    }
-                }
-
-                App.setupUI();
-                App.setupObserver();
-                App.applyFilters();
-                App.updateFavoritesUI();
+                } catch(e) { console.error("Load failed:", e); const b = document.getElementById('error-banner'); if (b) b.classList.remove('hidden'); }
+                App.setupUI(); App.setupObserver(); App.applyFilters(); App.updateFavoritesUI();
             },
-
             setupUI: () => {
-                const quickCatContainer = document.getElementById('quick-categories');
-                if (quickCatContainer) {
-                    for (const cat of Renderer.CATEGORIES_CONFIG) {
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = `flex flex-col items-center justify-center p-5 rounded-2xl border ${cat.border} ${cat.bg} hover:shadow-md transition-all hover:-translate-y-1 group focus:ring-2 focus:ring-sky-500 outline-none w-full`;
-                        btn.innerHTML = `
-                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                                <span data-lucide="${cat.icon}" class="w-7 h-7 ${cat.color}" aria-hidden="true"></span>
-                            </div>
-                            <span class="text-sm font-semibold text-slate-800 text-center leading-tight">${Utils.escapeHTML(cat.name)}</span>
-                        `;
-                        btn.addEventListener('click', () => {
-                            State.filters.categories.clear();
-                            State.filters.categories.add(cat.name);
-                            for (const cb of document.querySelectorAll('.cat-cb')) {
-                                cb.checked = State.filters.categories.has(cb.value);
-                            }
-                            App.applyFilters();
-                            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
-                        });
-                        quickCatContainer.appendChild(btn);
-                    }
-                }
-
-                const desktopCatContainer = document.getElementById('category-filters');
-                const mobileCatContainer = document.getElementById('mobile-category-filters');
-                const filterHTML = Renderer.CATEGORIES_CONFIG.map(cat => {
-                    const safeName = Utils.escapeHTML(cat.name);
-                    return `<label class="flex items-center gap-3 cursor-pointer group p-1 rounded-lg hover:bg-slate-50 transition-colors -ml-1 pl-1">
-                            <input type="checkbox" value="${safeName}" class="cat-cb w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
-                            <span class="flex items-center gap-2 text-sm text-slate-700 group-hover:text-sky-900 flex-grow">
-                                <span data-lucide="${cat.icon}" class="w-4 h-4 ${cat.color} opacity-80" aria-hidden="true"></span> ${safeName}
-                            </span>
-                        </label>`;
-                }).join('');
-                if (desktopCatContainer) desktopCatContainer.insertAdjacentHTML('beforeend', filterHTML);
-                if (mobileCatContainer) mobileCatContainer.insertAdjacentHTML('beforeend', filterHTML);
-
-                const mobileCountyContainer = document.getElementById('mobile-county-radios-container');
-                if (mobileCountyContainer) {
-                    const desktopRadios = document.getElementById('desktop-county-radios');
-                    if (desktopRadios) {
-                        mobileCountyContainer.innerHTML = desktopRadios.innerHTML.replace(/name="county-desktop"/g, 'name="county-mobile"');
-                    }
-                }
+                const qc = document.getElementById('quick-categories');
+                if (qc) { for (const cat of Renderer.CATEGORIES_CONFIG) { const b = document.createElement('button'); b.type='button'; b.className=`flex flex-col items-center justify-center p-5 rounded-2xl border ${cat.border} ${cat.bg} hover:shadow-md transition-all hover:-translate-y-1 group focus:ring-2 focus:ring-sky-500 outline-none w-full`; b.innerHTML=`<div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300"><span data-lucide="${cat.icon}" class="w-7 h-7 ${cat.color}" aria-hidden="true"></span></div><span class="text-sm font-semibold text-slate-800 text-center leading-tight">${Utils.escapeHTML(cat.name)}</span>`; b.addEventListener('click',()=>{State.filters.categories.clear();State.filters.categories.add(cat.name);for(const cb of document.querySelectorAll('.cat-cb'))cb.checked=State.filters.categories.has(cb.value);App.applyFilters();document.getElementById('main-content').scrollIntoView({behavior:'smooth'});}); qc.appendChild(b); } }
+                const fh = Renderer.CATEGORIES_CONFIG.map(c=>{const sn=Utils.escapeHTML(c.name);return`<label class="flex items-center gap-3 cursor-pointer group p-1 rounded-lg hover:bg-slate-50 transition-colors -ml-1 pl-1"><input type="checkbox" value="${sn}" class="cat-cb w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500"><span class="flex items-center gap-2 text-sm text-slate-700 group-hover:text-sky-900 flex-grow"><span data-lucide="${c.icon}" class="w-4 h-4 ${c.color} opacity-80" aria-hidden="true"></span> ${sn}</span></label>`;}).join('');
+                const dc = document.getElementById('category-filters'), mc = document.getElementById('mobile-category-filters');
+                if (dc) dc.insertAdjacentHTML('beforeend', fh); if (mc) mc.insertAdjacentHTML('beforeend', fh);
+                const mcc = document.getElementById('mobile-county-radios-container'), dr = document.getElementById('desktop-county-radios');
+                if (mcc && dr) mcc.innerHTML = dr.innerHTML.replace(/name="county-desktop"/g, 'name="county-mobile"');
                 App.updateCityDropdowns();
-
-                const globalSearch = document.getElementById('global-search');
-                if (globalSearch) {
-                    globalSearch.addEventListener('input', Utils.debounce((e) => {
-                        State.filters.search = e.target.value;
-                        App.applyFilters();
-                    }, 250));
-                }
-
-                const btnListView = document.getElementById('btn-list-view');
-                const btnMapView = document.getElementById('btn-map-view');
-                if (btnListView) btnListView.addEventListener('click', () => App.toggleView('list'));
-                if (btnMapView) btnMapView.addEventListener('click', () => App.toggleView('map'));
-
-                const mobileMenu = document.getElementById('mobile-filter-menu');
-                const mobileTrigger = document.getElementById('mobile-filter-trigger');
-                const applyMobile = document.getElementById('apply-mobile-filters');
-                const closeMobile = document.getElementById('close-mobile-filters');
-
-                if (mobileTrigger && mobileMenu) {
-                    mobileTrigger.addEventListener('click', () => {
-                        mobileMenu.removeAttribute('inert');
-                        mobileMenu.setAttribute('aria-modal', 'true');
-                        mobileMenu.showModal();
-                        mobileMenu.classList.remove('translate-x-full');
-                    });
-                }
-                if (applyMobile && mobileMenu) {
-                    applyMobile.addEventListener('click', () => {
-                        mobileMenu.classList.add('translate-x-full');
-                        setTimeout(() => {
-                            if (mobileMenu.open) {
-                                mobileMenu.close();
-                            }
-                            mobileMenu.setAttribute('inert', '');
-                            mobileMenu.removeAttribute('aria-modal');
-                        }, 300);
-                    });
-                }
-                if (closeMobile && mobileMenu) {
-                    closeMobile.addEventListener('click', () => {
-                        setTimeout(() => {
-                            mobileMenu.setAttribute('inert', '');
-                            mobileMenu.removeAttribute('aria-modal');
-                        }, 300);
-                    });
-                }
-
-                const showFavs = document.getElementById('show-favorites-nav');
-                if (showFavs) {
-                    showFavs.addEventListener('click', () => {
-                        State.filters.showFavorites = !State.filters.showFavorites;
-                        App.applyFilters();
-                    });
-                }
-
+                document.getElementById('btn-list-view').addEventListener('click', ()=>App.toggleView('list'));
+                document.getElementById('btn-map-view').addEventListener('click', ()=>App.toggleView('map'));
+                const mm = document.getElementById('mobile-filter-menu');
+                document.getElementById('mobile-filter-trigger').addEventListener('click', ()=>{mm.removeAttribute('inert');mm.setAttribute('aria-modal','true');mm.showModal();mm.classList.remove('translate-x-full');});
+                document.getElementById('apply-mobile-filters').addEventListener('click', ()=>{mm.classList.add('translate-x-full');setTimeout(()=>{if(mm.open)mm.close();mm.setAttribute('inert','');mm.removeAttribute('aria-modal');},300);});
+                document.getElementById('close-mobile-filters').addEventListener('click', ()=>{setTimeout(()=>{mm.setAttribute('inert','');mm.removeAttribute('aria-modal');},300);});
+                document.getElementById('show-favorites-nav').addEventListener('click', ()=>{State.filters.showFavorites=!State.filters.showFavorites;App.applyFilters();});
                 document.addEventListener('click', (e) => {
-                    const toggleFavBtn = e.target.closest('[data-action="toggle-fav"]');
-                    if (toggleFavBtn) {
-                        DataManager.toggleFavorite(toggleFavBtn.getAttribute('data-id'));
-                        App.updateHeartIcon(toggleFavBtn);
-                        return;
-                    }
-
-                    const openBtn = e.target.closest('[data-action="open-modal"]');
-                    if (openBtn) {
-                        App.openModal(openBtn.getAttribute('data-id'));
-                        return;
-                    }
-
-                    if (e.target.closest('#modal-fav')) {
-                        const id = document.getElementById('modal-fav').getAttribute('data-id');
-                        DataManager.toggleFavorite(id);
-                        App.updateModalFavButton(id);
-                        const cardBtn = document.querySelector(`button[data-action="toggle-fav"][data-id="${id}"]`);
-                        if (cardBtn) App.updateHeartIcon(cardBtn);
-                    }
-
-                    if (e.target.closest('#modal-share')) {
-                        App.shareResource(document.getElementById('modal-share').getAttribute('data-id'));
-                    }
+                    const tf = e.target.closest('[data-action="toggle-fav"]'); if (tf) { DataManager.toggleFavorite(tf.getAttribute('data-id')); App.updateHeartIcon(tf); return; }
+                    const om = e.target.closest('[data-action="open-modal"]'); if (om) { App.openModal(om.getAttribute('data-id')); return; }
+                    if (e.target.closest('#modal-fav')) { const id = document.getElementById('modal-fav').getAttribute('data-id'); DataManager.toggleFavorite(id); App.updateModalFavButton(id); const cb = document.querySelector(`button[data-action="toggle-fav"][data-id="${id}"]`); if (cb) App.updateHeartIcon(cb); }
+                    if (e.target.closest('#modal-share')) App.shareResource(document.getElementById('modal-share').getAttribute('data-id'));
                 });
-
                 document.addEventListener('change', e => {
-                    if (e.target.name === 'county-desktop' || e.target.name === 'county-mobile') {
-                        State.filters.county = e.target.value;
-                        const selector = `input[name="county-desktop"][value="${e.target.value}"], input[name="county-mobile"][value="${e.target.value}"]`;
-                        for (const r of document.querySelectorAll(selector)) {
-                            r.checked = true;
-                        }
-                        App.updateCityDropdowns();
-                        App.applyFilters();
-                    }
-                    if (e.target.id === 'city-filter' || e.target.id === 'mobile-city-filter') {
-                        State.filters.city = e.target.value;
-                        const cityFilter = document.getElementById('city-filter');
-                        const mobileCityFilter = document.getElementById('mobile-city-filter');
-                        if (cityFilter) cityFilter.value = e.target.value;
-                        if (mobileCityFilter) mobileCityFilter.value = e.target.value;
-                        App.applyFilters();
-                    }
-                    if (e.target.classList.contains('cat-cb')) {
-                        if (e.target.checked) {
-                            State.filters.categories.add(e.target.value);
-                        } else {
-                            State.filters.categories.delete(e.target.value);
-                        }
-                        for (const cb of document.querySelectorAll('.cat-cb')) {
-                            cb.checked = State.filters.categories.has(cb.value);
-                        }
-                        App.applyFilters();
-                    }
+                    if (e.target.name==='county-desktop'||e.target.name==='county-mobile') { State.filters.county=e.target.value; for(const r of document.querySelectorAll(`input[name="county-desktop"][value="${e.target.value}"], input[name="county-mobile"][value="${e.target.value}"]`))r.checked=true; App.updateCityDropdowns(); App.applyFilters(); }
+                    if (e.target.id==='city-filter'||e.target.id==='mobile-city-filter') { State.filters.city=e.target.value; const cf=document.getElementById('city-filter'), mcf=document.getElementById('mobile-city-filter'); if(cf)cf.value=e.target.value; if(mcf)mcf.value=e.target.value; App.applyFilters(); }
+                    if (e.target.classList.contains('cat-cb')) { e.target.checked?State.filters.categories.add(e.target.value):State.filters.categories.delete(e.target.value); for(const cb of document.querySelectorAll('.cat-cb'))cb.checked=State.filters.categories.has(cb.value); App.applyFilters(); }
                 });
-
-                const clearAll = () => {
-                    State.filters = { county: 'All', city: 'All', categories: new Set(), search: '', showFavorites: false };
-                    const searchInput = document.getElementById('global-search');
-                    if (searchInput) searchInput.value = '';
-                    for (const cb of document.querySelectorAll('.cat-cb')) {
-                        cb.checked = false;
-                    }
-                    const allRadios = document.querySelectorAll('input[name="county-desktop"][value="All"], input[name="county-mobile"][value="All"]');
-                    for (const r of allRadios) {
-                        r.checked = true;
-                    }
-                    App.updateCityDropdowns();
-                    App.applyFilters();
-                };
-
-                const clearDesktop = document.getElementById('clear-filters-desktop');
-                const clearMobile = document.getElementById('clear-filters-mobile');
-                const clearEmpty = document.getElementById('empty-clear-btn');
-                if (clearDesktop) clearDesktop.addEventListener('click', clearAll);
-                if (clearMobile) clearMobile.addEventListener('click', clearAll);
-                if (clearEmpty) clearEmpty.addEventListener('click', clearAll);
-
+                const ca = () => { State.filters={county:'All',city:'All',categories:new Set(),showFavorites:false}; for(const cb of document.querySelectorAll('.cat-cb'))cb.checked=false; for(const r of document.querySelectorAll('input[name="county-desktop"][value="All"], input[name="county-mobile"][value="All"]'))r.checked=true; App.updateCityDropdowns(); App.applyFilters(); };
+                document.getElementById('clear-filters-desktop').addEventListener('click', ca);
+                document.getElementById('clear-filters-mobile').addEventListener('click', ca);
+                document.getElementById('empty-clear-btn').addEventListener('click', ca);
                 if (window.lucide) window.lucide.createIcons();
             },
-
-            setupObserver: () => {
-                App.observer = new IntersectionObserver((entries) => {
-                    if (entries[0].isIntersecting && State.lastRenderedCount < State.filteredResources.length) {
-                        Renderer.renderChunk(State.filteredResources, State.lastRenderedCount, 12);
-                    }
-                }, { rootMargin: '200px' });
-                const sentinel = document.getElementById('load-more-sentinel');
-                if (sentinel) App.observer.observe(sentinel);
-            },
-
-            updateCityDropdowns: () => {
-                const cCounty = State.filters.county;
-                const fCities = cCounty === 'All'
-                    ? State.cities
-                    : State.cities.filter(c => c.county === cCounty || c.county === 'All');
-                const html = '<option value="All">All Communities</option>' +
-                    fCities.sort((a, b) => a.name.localeCompare(b.name))
-                        .map(c => `<option value="${Utils.escapeHTML(c.name)}">${Utils.escapeHTML(c.name)}</option>`)
-                        .join('');
-                const cityFilter = document.getElementById('city-filter');
-                const mobileCityFilter = document.getElementById('mobile-city-filter');
-                if (cityFilter) cityFilter.innerHTML = html;
-                if (mobileCityFilter) mobileCityFilter.innerHTML = html;
-
-                const options = cityFilter ? Array.from(cityFilter.options) : [];
-                if (options.some(o => o.value === State.filters.city)) {
-                    if (cityFilter) cityFilter.value = State.filters.city;
-                    if (mobileCityFilter) mobileCityFilter.value = State.filters.city;
-                } else {
-                    State.filters.city = 'All';
-                }
-            },
-
+            setupObserver: () => { App.observer = new IntersectionObserver((e)=>{if(e[0].isIntersecting&&State.lastRenderedCount<State.filteredResources.length)Renderer.renderChunk(State.filteredResources,State.lastRenderedCount,12);},{rootMargin:'200px'}); const s = document.getElementById('load-more-sentinel'); if(s) App.observer.observe(s); },
+            updateCityDropdowns: () => { const cc=State.filters.county, fc=cc==='All'?State.cities:State.cities.filter(c=>c.county===cc||c.county==='All'), h='<option value="All">All Communities</option>'+fc.sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${Utils.escapeHTML(c.name)}">${Utils.escapeHTML(c.name)}</option>`).join(''), cf=document.getElementById('city-filter'), mcf=document.getElementById('mobile-city-filter'); if(cf)cf.innerHTML=h; if(mcf)mcf.innerHTML=h; const opts=cf?Array.from(cf.options):[]; if(opts.some(o=>o.value===State.filters.city)){if(cf)cf.value=State.filters.city;if(mcf)mcf.value=State.filters.city;}else{State.filters.city='All';} },
             applyFilters: () => {
-                const { county, city, categories, search, showFavorites } = State.filters;
-                const term = search.toLowerCase();
-
-                State.filteredResources = State.resources.filter(res => {
-                    if (showFavorites && !State.favorites.has(res.id)) return false;
-                    if (county !== 'All' && res.county !== county && !res.regionWide) return false;
-                    if (city !== 'All' && res.city !== city && !res.regionWide) return false;
-                    if (categories.size > 0 && !res.categories.some(c => categories.has(c))) return false;
-                    if (term && !res.searchIndex.includes(term)) return false;
-                    return true;
-                });
-
-                const resultCount = document.getElementById('result-count');
-                const favBadge = document.getElementById('favorites-badge');
-                const listContainer = document.getElementById('list-container');
-                const listViewSection = document.getElementById('list-view-section');
-                const emptyState = document.getElementById('empty-state');
-
-                if (resultCount) resultCount.textContent = State.filteredResources.length;
-                if (favBadge) favBadge.classList.toggle('hidden', !showFavorites);
-                if (listContainer) listContainer.innerHTML = '';
-                State.lastRenderedCount = 0;
-
-                if (State.filteredResources.length === 0) {
-                    if (listViewSection) listViewSection.classList.add('hidden');
-                    if (emptyState) {
-                        emptyState.classList.remove('hidden');
-                        emptyState.classList.add('flex');
-                    }
-                } else {
-                    if (emptyState) {
-                        emptyState.classList.add('hidden');
-                        emptyState.classList.remove('flex');
-                    }
-                    if (State.view === 'list') {
-                        if (listViewSection) listViewSection.classList.remove('hidden');
-                        Renderer.renderChunk(State.filteredResources, 0, 12);
-                    }
-                }
+                const { county, city, categories, showFavorites } = State.filters;
+                State.filteredResources = State.resources.filter(res => { if (showFavorites && !State.favorites.has(res.id)) return false; if (county!=='All' && res.county!==county && !res.regionWide) return false; if (city!=='All' && res.city!==city && !res.regionWide) return false; if (categories.size>0 && !res.categories.some(c=>categories.has(c))) return false; return true; });
+                document.getElementById('result-count').textContent = State.filteredResources.length;
+                document.getElementById('favorites-badge').classList.toggle('hidden', !showFavorites);
+                document.getElementById('list-container').innerHTML = ''; State.lastRenderedCount = 0;
+                const lvs = document.getElementById('list-view-section'), es = document.getElementById('empty-state');
+                if (State.filteredResources.length === 0) { if(lvs)lvs.classList.add('hidden'); if(es){es.classList.remove('hidden');es.classList.add('flex');} }
+                else { if(es){es.classList.add('hidden');es.classList.remove('flex');} if(State.view==='list'){if(lvs)lvs.classList.remove('hidden');Renderer.renderChunk(State.filteredResources,0,12);} }
                 if (MapModule.instance) MapModule.updateVisibility(State.filteredResources);
             },
-
-            toggleView: (view) => {
-                State.view = view;
-                const isList = view === 'list';
-                const btnListView = document.getElementById('btn-list-view');
-                const btnMapView = document.getElementById('btn-map-view');
-                const listViewSection = document.getElementById('list-view-section');
-                const mapContainer = document.getElementById('map-container');
-                const emptyState = document.getElementById('empty-state');
-
-                if (btnListView) {
-                    btnListView.setAttribute('aria-pressed', isList);
-                    btnListView.className = `flex-1 sm:flex-none px-4 py-2 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-sky-500 outline-none ${isList ? 'bg-white shadow-sm text-sky-700' : 'text-slate-600 hover:text-slate-900'}`;
-                }
-                if (btnMapView) {
-                    btnMapView.setAttribute('aria-pressed', !isList);
-                    btnMapView.className = `flex-1 sm:flex-none px-4 py-2 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-sky-500 outline-none ${!isList ? 'bg-white shadow-sm text-sky-700' : 'text-slate-600 hover:text-slate-900'}`;
-                }
-                if (listViewSection) listViewSection.classList.toggle('hidden', !isList);
-                if (mapContainer) mapContainer.classList.toggle('hidden', isList);
-
-                if (!isList) {
-                    if (emptyState) emptyState.classList.add('hidden');
-                    MapModule.init();
-                    MapModule.updateVisibility(State.filteredResources);
-                } else if (State.filteredResources.length === 0) {
-                    if (listViewSection) listViewSection.classList.add('hidden');
-                    if (emptyState) emptyState.classList.remove('hidden');
-                } else if (State.lastRenderedCount === 0) {
-                    Renderer.renderChunk(State.filteredResources, 0, 12);
-                }
-            },
-
-            openModal: (id) => {
-                const res = State.resources.find(r => r.id === id);
-                if (!res) return;
-                State.lastFocusedElement = document.activeElement;
-
-                const modal = document.getElementById('resource-modal');
-                if (!modal) return;
-                modal.setAttribute('aria-modal', 'true');
-
-                const modalName = document.getElementById('modal-name');
-                const modalCityCounty = document.getElementById('modal-city-county');
-                const modalDesc = document.getElementById('modal-desc');
-                const modalAddress = document.getElementById('modal-address');
-                const modalBadges = document.getElementById('modal-badges');
-                const modalDirections = document.getElementById('modal-directions');
-                const modalContact = document.getElementById('modal-contact');
-                const modalSocials = document.getElementById('modal-socials');
-                const modalHours = document.getElementById('modal-hours');
-                const modalEligibility = document.getElementById('modal-eligibility');
-                const modalFav = document.getElementById('modal-fav');
-                const modalShare = document.getElementById('modal-share');
-
-                if (modalName) modalName.textContent = res.name;
-                if (modalCityCounty) modalCityCounty.textContent = `${res.city}, ${res.county} County`;
-                if (modalDesc) modalDesc.textContent = res.description;
-                if (modalAddress) modalAddress.textContent = res.address || "Location unlisted.";
-
-                if (modalBadges) {
-                    modalBadges.innerHTML = res.categories.map(c => {
-                        const s = Renderer.getStyle(c);
-                        return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${s.bg} ${s.color} border ${s.border}"><span data-lucide="${s.icon}" class="w-3 h-3" aria-hidden="true"></span> ${Utils.escapeHTML(c)}</span>`;
-                    }).join('');
-                }
-
-                if (modalDirections) {
-                    if (res.address || (res.lat && res.lng)) {
-                        modalDirections.href = `https://maps.google.com/?q=${encodeURIComponent(res.address || `${res.lat},${res.lng}`)}`;
-                        modalDirections.style.display = 'inline-flex';
-                    } else {
-                        modalDirections.style.display = 'none';
-                    }
-                }
-
-                let contactHtml = '';
-                if (res.phone) {
-                    contactHtml += `<a href="tel:${Utils.escapeHTML(res.phone)}" class="flex items-center gap-2 text-sky-700 hover:text-sky-900 hover:underline font-medium outline-none"><span data-lucide="phone" class="w-4 h-4"></span> ${Utils.escapeHTML(res.phone)}</a>`;
-                }
-                if (Utils.isValidUrl(res.website)) {
-                    contactHtml += `<a href="${Utils.escapeHTML(res.website)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-700 hover:text-sky-700 hover:underline outline-none"><span data-lucide="external-link" class="w-4 h-4"></span> Visit Website</a>`;
-                }
-                if (modalContact) {
-                    modalContact.innerHTML = contactHtml || '<p class="text-slate-500 italic">No contact info provided.</p>';
-                }
-                if (modalSocials) modalSocials.innerHTML = Renderer.generateSocialHtml(res.socialMedia);
-                if (modalHours) modalHours.textContent = res.hours || "Not specified";
-                if (modalEligibility) modalEligibility.textContent = res.eligibility || "Open / Not specified";
-
-                if (modalFav) modalFav.setAttribute('data-id', res.id);
-                App.updateModalFavButton(res.id);
-
-                if (modalShare) {
-                    modalShare.setAttribute('data-id', res.id);
-                    modalShare.style.display = navigator.share ? 'inline-flex' : 'none';
-                }
-
-                if (window.lucide) window.lucide.createIcons();
-
-                modal.showModal();
-                if (modalName) modalName.focus();
-
-                const onClose = () => {
-                    modal.removeAttribute('aria-modal');
-                    modal.removeEventListener('close', onClose);
-                    if (State.lastFocusedElement) {
-                        State.lastFocusedElement.focus();
-                        State.lastFocusedElement = null;
-                    }
-                };
-                modal.addEventListener('close', onClose);
-            },
-
-            closeModal: () => {
-                const modal = document.getElementById('resource-modal');
-                if (modal) modal.close();
-            },
-
-            updateHeartIcon: (btn) => {
-                if (!btn) return;
-                const isFav = State.favorites.has(btn.getAttribute('data-id'));
-                btn.innerHTML = `<span data-lucide="heart" class="w-5 h-5 ${isFav ? 'text-rose-600 fill-rose-600' : 'text-slate-400'} transition-colors" aria-hidden="true"></span>`;
-                btn.setAttribute('aria-label', isFav ? 'Remove from favorites' : 'Add to favorites');
-                if (window.lucide) window.lucide.createIcons();
-            },
-
-            updateModalFavButton: (id) => {
-                const btn = document.getElementById('modal-fav');
-                if (!btn) return;
-                const isFav = State.favorites.has(id);
-                btn.innerHTML = `<span data-lucide="heart" class="w-4 h-4" aria-hidden="true"></span> ${isFav ? 'Saved' : 'Save'}`;
-                btn.className = `px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors shadow-sm focus:ring-2 outline-none inline-flex items-center gap-2 ${isFav ? 'bg-rose-600 text-white focus:ring-rose-500 hover:bg-rose-700' : 'bg-rose-50 text-rose-600 focus:ring-rose-500 hover:bg-rose-100'}`;
-                if (window.lucide) window.lucide.createIcons();
-            },
-
-            updateFavoritesUI: () => {
-                const favCount = document.getElementById('fav-count');
-                if (favCount) favCount.textContent = State.favorites.size;
-                App.applyFilters();
-            },
-
-            shareResource: async (id) => {
-                const res = State.resources.find(r => r.id === id);
-                if (res && navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: `Resource: ${res.name}`,
-                            text: `Check out ${res.name} in the Coast Resource Guide: ${res.description.substring(0, 100)}...`,
-                            url: res.website || window.location.href
-                        });
-                    } catch (err) {
-                        if (err.name !== 'AbortError') {
-                            console.warn('Share failed:', err);
-                        }
-                    }
-                }
-            }
+            toggleView: (v) => { State.view=v; const il=v==='list', bl=document.getElementById('btn-list-view'), bm=document.getElementById('btn-map-view'), lvs=document.getElementById('list-view-section'), mc=document.getElementById('map-container'), es=document.getElementById('empty-state'); if(bl){bl.setAttribute('aria-pressed',il);bl.className=`flex-1 sm:flex-none px-4 py-2 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-sky-500 outline-none ${il?'bg-white shadow-sm text-sky-700':'text-slate-600 hover:text-slate-900'}`;} if(bm){bm.setAttribute('aria-pressed',!il);bm.className=`flex-1 sm:flex-none px-4 py-2 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-sky-500 outline-none ${!il?'bg-white shadow-sm text-sky-700':'text-slate-600 hover:text-slate-900'}`;} if(lvs)lvs.classList.toggle('hidden',!il); if(mc)mc.classList.toggle('hidden',il); if(!il){if(es)es.classList.add('hidden');MapModule.init();MapModule.updateVisibility(State.filteredResources);} else if(State.filteredResources.length===0){if(lvs)lvs.classList.add('hidden');if(es)es.classList.remove('hidden');} else if(State.lastRenderedCount===0)Renderer.renderChunk(State.filteredResources,0,12); },
+            openModal: (id) => { const res=State.resources.find(r=>r.id===id); if(!res)return; State.lastFocusedElement=document.activeElement; const modal=document.getElementById('resource-modal'); if(!modal)return; modal.setAttribute('aria-modal','true'); const mn=document.getElementById('modal-name'), mc=document.getElementById('modal-city-county'), md=document.getElementById('modal-desc'), ma=document.getElementById('modal-address'), mb=document.getElementById('modal-badges'), mdir=document.getElementById('modal-directions'), mco=document.getElementById('modal-contact'), ms=document.getElementById('modal-socials'), mh=document.getElementById('modal-hours'), me=document.getElementById('modal-eligibility'), mf=document.getElementById('modal-fav'), msh=document.getElementById('modal-share'); if(mn)mn.textContent=res.name; if(mc)mc.textContent=`${res.city}, ${res.county} County`; if(md)md.textContent=res.description; if(ma)ma.textContent=res.address||"Location unlisted."; if(mb)mb.innerHTML=res.categories.map(c=>{const s=Renderer.getStyle(c);return`<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${s.bg} ${s.color} border ${s.border}"><span data-lucide="${s.icon}" class="w-3 h-3" aria-hidden="true"></span> ${Utils.escapeHTML(c)}</span>`;}).join(''); if(mdir){if(res.address||(res.lat&&res.lng)){mdir.href=`https://maps.google.com/?q=${encodeURIComponent(res.address||`${res.lat},${res.lng}`)}`;mdir.style.display='inline-flex';}else mdir.style.display='none';} let ch=''; if(res.phone)ch+=`<a href="tel:${Utils.escapeHTML(res.phone)}" class="flex items-center gap-2 text-sky-700 hover:text-sky-900 hover:underline font-medium outline-none"><span data-lucide="phone" class="w-4 h-4"></span> ${Utils.escapeHTML(res.phone)}</a>`; if(Utils.isValidUrl(res.website))ch+=`<a href="${Utils.escapeHTML(res.website)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-700 hover:text-sky-700 hover:underline outline-none"><span data-lucide="external-link" class="w-4 h-4"></span> Visit Website</a>`; if(mco)mco.innerHTML=ch||'<p class="text-slate-500 italic">No contact info provided.</p>'; if(ms)ms.innerHTML=Renderer.generateSocialHtml(res.socialMedia); if(mh)mh.textContent=res.hours||"Not specified"; if(me)me.textContent=res.eligibility||"Open / Not specified"; if(mf)mf.setAttribute('data-id',res.id); App.updateModalFavButton(res.id); if(msh){msh.setAttribute('data-id',res.id);msh.style.display=navigator.share?'inline-flex':'none';} if(window.lucide)window.lucide.createIcons(); modal.showModal(); if(mn)mn.focus(); const oc=()=>{modal.removeAttribute('aria-modal');modal.removeEventListener('close',oc);if(State.lastFocusedElement){State.lastFocusedElement.focus();State.lastFocusedElement=null;}}; modal.addEventListener('close',oc); },
+            closeModal: () => { const m = document.getElementById('resource-modal'); if (m) m.close(); },
+            updateHeartIcon: (btn) => { if(!btn)return; const i=State.favorites.has(btn.getAttribute('data-id')); btn.innerHTML=`<span data-lucide="heart" class="w-5 h-5 ${i?'text-rose-600 fill-rose-600':'text-slate-400'} transition-colors" aria-hidden="true"></span>`; btn.setAttribute('aria-label',i?'Remove from favorites':'Add to favorites'); if(window.lucide)window.lucide.createIcons(); },
+            updateModalFavButton: (id) => { const b=document.getElementById('modal-fav'); if(!b)return; const i=State.favorites.has(id); b.innerHTML=`<span data-lucide="heart" class="w-4 h-4" aria-hidden="true"></span> ${i?'Saved':'Save'}`; b.className=`px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors shadow-sm focus:ring-2 outline-none inline-flex items-center gap-2 ${i?'bg-rose-600 text-white focus:ring-rose-500 hover:bg-rose-700':'bg-rose-50 text-rose-600 focus:ring-rose-500 hover:bg-rose-100'}`; if(window.lucide)window.lucide.createIcons(); },
+            updateFavoritesUI: () => { const fc=document.getElementById('fav-count'); if(fc)fc.textContent=State.favorites.size; App.applyFilters(); },
+            shareResource: async (id) => { const r=State.resources.find(r=>r.id===id); if(r&&navigator.share){try{await navigator.share({title:`Resource: ${r.name}`,text:`Check out ${r.name} in the Coast Resource Guide: ${r.description.substring(0,100)}...`,url:r.website||window.location.href});}catch(e){if(e.name!=='AbortError')console.warn('Share failed:',e);}} }
         };
-
-        // Boot
         document.addEventListener('DOMContentLoaded', App.init);
     </script>
 </body>
