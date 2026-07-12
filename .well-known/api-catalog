@@ -1,0 +1,10 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://coastresourceguide.org/",
+      "service-desc": "https://raw.githubusercontent.com/CoastResourceGuide/coastresourceguide/main/data/resources.json",
+      "service-doc": "https://github.com/CoastResourceGuide/coastresourceguide",
+      "status": "https://api.github.com/repos/CoastResourceGuide/coastresourceguide"
+    }
+  ]
+}
