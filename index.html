@@ -380,9 +380,10 @@
             </div>
             <div>
                 <h2 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Maintain This Guide</h2>
-                <p class="mb-2 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-slate-500" aria-hidden="true"></i> Data last updated: <span id="last-updated-date" class="font-medium text-white">...</span></<a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none">
-    <i data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></i> Submit a correction
-</a>
+                <p class="mb-2 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-slate-500" aria-hidden="true"></i> Data last updated: <span id="last-updated-date" class="font-medium text-white">...</span></p>
+                <a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none">
+                    <i data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></i> Submit a correction
+                </a>
             </div>
         </div>
     </footer>
@@ -625,31 +626,50 @@
                     if (!resResponse.ok || !cityResponse.ok) throw new Error("Fetch failed");
                     
                     const resData = await resResponse.json();
-State.resources = DataManager.validateAndIndex(resData);
-State.cities = await cityResponse.json();
+                    State.resources = DataManager.validateAndIndex(resData);
+                    State.cities = await cityResponse.json();
 
-// Fetch latest commit date from GitHub API
-try {
-    const ghResponse = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1');
-    if (ghResponse.ok) {
-        const commits = await ghResponse.json();
-        if (commits.length > 0) {
-            const lastCommitDate = new Date(commits[0].commit.committer.date);
-            const formatted = lastCommitDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            document.getElementById('last-updated-date').textContent = formatted;
-        }
-    } else {
-        document.getElementById('last-updated-date').textContent = Utils.escapeHTML(resData.lastUpdated);
-    }
-} catch {
-    document.getElementById('last-updated-date').textContent = Utils.escapeHTML(resData.lastUpdated);
-}
+                    // Fetch latest commit date from GitHub with localStorage cache
+                    const CACHE_KEY = 'crg_last_commit';
+                    const CACHE_TIME_KEY = 'crg_last_commit_time';
+                    const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
-SEO.injectStructuredData(State.resources);
+                    async function getLastCommitDate() {
+                        const cached = localStorage.getItem(CACHE_KEY);
+                        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+                        if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_DURATION) {
+                            return cached;
+                        }
+                        try {
+                            const ghResponse = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1');
+                            if (ghResponse.ok) {
+                                const commits = await ghResponse.json();
+                                if (commits.length > 0) {
+                                    const commitDate = new Date(commits[0].commit.committer.date);
+                                    const formatted = commitDate.toLocaleDateString('en-US', { 
+                                        month: '2-digit', 
+                                        day: '2-digit', 
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                        timeZone: 'America/Los_Angeles'
+                                    }) + ' PST';
+                                    localStorage.setItem(CACHE_KEY, formatted);
+                                    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+                                    return formatted;
+                                }
+                            }
+                        } catch (e) {
+                            console.log('GitHub API unavailable, using fallback');
+                        }
+                        return null;
+                    }
+
+                    const commitDate = await getLastCommitDate();
+                    document.getElementById('last-updated-date').textContent = commitDate || Utils.escapeHTML(resData.lastUpdated);
+
+                    SEO.injectStructuredData(State.resources);
                 } catch (e) {
                     console.error("Failed to load live data.", e);
                     document.getElementById('error-banner').classList.remove('hidden');
@@ -717,9 +737,10 @@ SEO.injectStructuredData(State.resources);
                 document.addEventListener('click', (e) => {
                     const toggleFavBtn = e.target.closest('[data-action="toggle-fav"]');
                     if (toggleFavBtn) { 
-    DataManager.toggleFavorite(toggleFavBtn.getAttribute('data-id')); 
-    App.updateHeartIcon(toggleFavBtn);
-    return;
+                        DataManager.toggleFavorite(toggleFavBtn.getAttribute('data-id')); 
+                        App.updateHeartIcon(toggleFavBtn);
+                        return;
+                    }
 
                     const openBtn = e.target.closest('[data-action="open-modal"]');
                     if (openBtn) { App.openModal(openBtn.getAttribute('data-id')); return; }
@@ -914,9 +935,8 @@ SEO.injectStructuredData(State.resources);
             },
 
             updateFavoritesUI: () => {
-    document.getElementById('fav-count').textContent = State.favorites.size;
-    App.applyFilters();
-},
+                document.getElementById('fav-count').textContent = State.favorites.size;
+                App.applyFilters();
             },
 
             shareResource: async (id) => {
