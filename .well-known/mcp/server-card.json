@@ -1,0 +1,16 @@
+{
+  "serverInfo": {
+    "name": "Coast Resource Guide",
+    "version": "1.0.0"
+  },
+  "transport": {
+    "type": "http",
+    "endpoint": "https://raw.githubusercontent.com/CoastResourceGuide/coastresourceguide/main/data/resources.json"
+  },
+  "capabilities": {
+    "resources": {
+      "list": true,
+      "read": true
+    }
+  }
+}
