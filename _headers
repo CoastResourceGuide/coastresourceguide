@@ -1,0 +1,7 @@
+# _headers
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </data/resources.json>; rel="service-doc"; type="application/json"
+  Link: </.well-known/agent-skills/index.json>; rel="agent-skills"
+  Link: </.well-known/mcp/server-card.json>; rel="mcp-server-card"
+  Link: </sitemap.xml>; rel="sitemap"
