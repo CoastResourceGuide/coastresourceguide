@@ -14,21 +14,28 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
 
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:locale" content="en_US">
-<meta property="og:url" content="https://coastresourceguide.org/">
-<meta property="og:site_name" content="Coast Resource Guide">
-<meta property="og:title" content="Coast Resource Guide">
-<meta property="og:description" content="Coast Resource Guide is a free community resource connecting residents of Clatsop and Tillamook counties with local services, organizations, and support resources.">
-<meta property="og:image" content="https://coastresourceguide.org/media/social-preview.jpeg">
-<meta property="og:image:alt" content="Coast Resource Guide">
+    <!-- Client Hints -->
+    <meta http-equiv="Accept-CH" content="Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile">
 
-<!-- X (Twitter) -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Coast Resource Guide">
-<meta name="twitter:description" content="Coast Resource Guide is a free community resource connecting residents of Clatsop and Tillamook counties with local services, organizations, and support resources.">
-<meta name="twitter:image" content="https://coastresourceguide.org/media/social-preview.jpeg">
+    <!-- Security Policies (GitHub Pages compatible via meta tags) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://unpkg.com https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://*.basemaps.cartocdn.com https://api.github.com https://raw.githubusercontent.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https://*.basemaps.cartocdn.com; connect-src 'self' https://api.github.com;">
+    <meta http-equiv="Permissions-Policy" content="geolocation=self, camera=(), microphone=(), payment=()">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://coastresourceguide.org/">
+    <meta property="og:site_name" content="Coast Resource Guide">
+    <meta property="og:title" content="Coast Resource Guide">
+    <meta property="og:description" content="Coast Resource Guide is a free community resource connecting residents of Clatsop and Tillamook counties with local services, organizations, and support resources.">
+    <meta property="og:image" content="https://coastresourceguide.org/media/social-preview.jpeg">
+    <meta property="og:image:alt" content="Coast Resource Guide">
+
+    <!-- X (Twitter) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Coast Resource Guide">
+    <meta name="twitter:description" content="Coast Resource Guide is a free community resource connecting residents of Clatsop and Tillamook counties with local services, organizations, and support resources.">
+    <meta name="twitter:image" content="https://coastresourceguide.org/media/social-preview.jpeg">
     
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,14 +68,35 @@
       "description": "A community-driven directory connecting Tillamook and Clatsop Counties to essential nonprofit, health, and social services."
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://coastresourceguide.org/"
+      }]
+    }
+    </script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" fetchpriority="high"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin=""/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" fetchpriority="high"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="anonymous"/>
+
+    <!-- Agent Discovery (RFC 8288 via HTML <link>) -->
+    <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json">
+    <link rel="service-doc" href="https://github.com/CoastResourceGuide/coastresourceguide">
+    <link rel="alternate" href="/data/resources.json" type="application/json" title="Resource Data">
+    <link rel="alternate" href="/index.md" type="text/markdown" title="Coast Resource Guide (Markdown)">
+    <link rel="sitemap" href="/sitemap.xml" type="application/xml">
+    <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json">
+    <link rel="mcp-server-card" href="/.well-known/mcp/server-card.json" type="application/json">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -89,7 +117,8 @@
         .marker-cluster-custom div { background-color: rgba(2, 132, 199, 0.9); color: white; font-weight: bold; }
         dialog::backdrop { background: rgba(15, 23, 42, 0.85); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
         dialog[open] { display: flex; flex-direction: column; }
-        #mobile-filter-menu { transition: transform 0.3s ease-in-out; }
+        #mobile-filter-menu { will-change: transform; transition: transform 0.3s ease-in-out; }
+        .group-hover\\:scale-110 { will-change: transform; }
         .translate-x-full { transform: translateX(100%); }
         .translate-x-0 { transform: translateX(0); }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; line-clamp: 3; overflow: hidden; }
@@ -112,7 +141,7 @@
 
     <nav class="bg-sky-950 shadow-md sticky top-0 z-40" aria-label="Main Navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="/" id="logo-link" class="flex items-center gap-2 group outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-sky-950 rounded-lg p-1 text-white">
+            <a href="/" id="logo-link" aria-current="page" class="flex items-center gap-2 group outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-sky-950 rounded-lg p-1 text-white">
                 <span data-lucide="anchor" class="w-6 h-6 text-sky-400 group-hover:text-white transition-colors" aria-hidden="true"></span>
                 <span class="font-serif font-bold text-lg tracking-tight">Coast Resource Guide</span>
             </a>
@@ -130,7 +159,7 @@
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div class="max-w-3xl mx-auto relative z-10 text-center">
             <h1 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">Find Help on the North Coast</h1>
-            <p class="text-white/90 mb-4 md:text-lg font-medium">Connecting Tillamook & Clatsop Counties to essential community resources.</p>
+            <p class="text-white/90 md:text-lg font-medium">Connecting Tillamook & Clatsop Counties to essential community resources.</p>
         </div>
     </header>
 
@@ -328,13 +357,19 @@
             <div>
                 <h2 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Maintain This Guide</h2>
                 <p class="mb-2 flex items-center gap-2"><span data-lucide="calendar" class="w-4 h-4 text-slate-500" aria-hidden="true"></span> Data last updated: <span id="last-updated-date" class="font-medium text-white">...</span></p>
-                <a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none"><span data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></span> Submit a correction</a>
+                <a href="https://github.com/CoastResourceGuide/coastresourceguide/issues/new?template=correction.md&title=Correction%3A+" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" class="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mt-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 focus:ring-2 focus:ring-sky-400 outline-none"><span data-lucide="edit-3" class="w-4 h-4" aria-hidden="true"></span> Submit a correction</a>
             </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin="" defer></script>
+    <noscript>
+        <div style="background:#ef4444;color:white;text-align:center;padding:1rem;font-family:system-ui,sans-serif;font-size:0.875rem;">
+            JavaScript is required to browse resources on this site. Please enable JavaScript in your browser settings.
+        </div>
+    </noscript>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin="anonymous" defer></script>
 
     <script type="module">
         const Utils = {
@@ -401,15 +436,55 @@
         const App = {
             init: async () => {
                 if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(e => console.warn('SW:', e));
+
+                // Offline detection
+                if (!navigator.onLine) {
+                    const banner = document.getElementById('error-banner');
+                    if (banner) { banner.textContent = 'You are offline. Some features may be unavailable.'; banner.classList.remove('hidden'); }
+                }
+                window.addEventListener('offline', () => { const b = document.getElementById('error-banner'); if (b) { b.textContent = 'You are offline.'; b.classList.remove('hidden'); } });
+                window.addEventListener('online', () => { const b = document.getElementById('error-banner'); if (b) b.classList.add('hidden'); });
+
+                const controller = new AbortController();
                 try {
-                    const [rr, cr] = await Promise.all([fetch('data/resources.json'), fetch('data/cities.json')]);
+                    const [rr, cr] = await Promise.all([
+                        fetch('data/resources.json', { signal: controller.signal }),
+                        fetch('data/cities.json', { signal: controller.signal })
+                    ]);
                     if (!rr.ok || !cr.ok) throw new Error("Fetch failed");
                     const rd = await rr.json(); State.resources = DataManager.validateAndIndex(rd); State.cities = await cr.json();
                     const CK = 'crg_last_commit', CTK = 'crg_last_commit_time', CD = 3600000;
-                    async function gcd() { const c = localStorage.getItem(CK), ct = localStorage.getItem(CTK); if (c && ct && (Date.now()-parseInt(ct,10))<CD) return c; try { const gr = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1'); if (gr.ok) { const gc = await gr.json(); if (gc.length) { const f = new Date(gc[0].commit.committer.date).toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'America/Los_Angeles'})+' PST'; localStorage.setItem(CK,f); localStorage.setItem(CTK,Date.now().toString()); return f; } } } catch(e){} return null; }
+                    async function gcd() {
+                        const c = localStorage.getItem(CK), ct = localStorage.getItem(CTK);
+                        if (c && ct && (Date.now()-parseInt(ct,10))<CD) return c;
+                        try {
+                            const gr = await fetch('https://api.github.com/repos/CoastResourceGuide/coastresourceguide/commits?per_page=1');
+                            if (gr.ok) {
+                                const gc = await gr.json();
+                                if (gc.length) {
+                                    const sha = gc[0].sha.substring(0, 7);
+                                    const dt = new Date(gc[0].commit.committer.date);
+                                    const fmt = new Intl.DateTimeFormat('en-US', {
+                                        month: '2-digit', day: '2-digit', year: 'numeric',
+                                        hour: 'numeric', minute: '2-digit', hour12: true,
+                                        timeZone: 'America/Los_Angeles'
+                                    }).format(dt) + ' PST';
+                                    const result = fmt + ' (' + sha + ')';
+                                    localStorage.setItem(CK, result);
+                                    localStorage.setItem(CTK, Date.now().toString());
+                                    return result;
+                                }
+                            }
+                        } catch(e) {}
+                        return null;
+                    }
                     const cd = await gcd(); const de = document.getElementById('last-updated-date'); if (de) de.textContent = cd || Utils.escapeHTML(rd.lastUpdated);
                     SEO.injectStructuredData(State.resources);
-                } catch(e) { console.error("Load failed:", e); const b = document.getElementById('error-banner'); if (b) b.classList.remove('hidden'); }
+                } catch(e) {
+                    if (e.name === 'AbortError') return;
+                    console.error("Load failed:", e);
+                    const b = document.getElementById('error-banner'); if (b) b.classList.remove('hidden');
+                }
                 App.setupUI(); App.setupObserver(); App.applyFilters(); App.updateFavoritesUI();
             },
             setupUI: () => {
