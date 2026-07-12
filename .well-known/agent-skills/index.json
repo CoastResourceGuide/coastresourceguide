@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentskills.io/schema/v0.2.0",
+  "skills": [
+    {
+      "name": "resource-lookup",
+      "type": "api",
+      "description": "Look up community resources in Tillamook and Clatsop Counties",
+      "url": "https://coastresourceguide.org/data/resources.json"
+    },
+    {
+      "name": "city-filter",
+      "type": "api",
+      "description": "List of cities for resource filtering",
+      "url": "https://coastresourceguide.org/data/cities.json"
+    }
+  ]
+}
