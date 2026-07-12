@@ -696,7 +696,10 @@
                 // Event Delegation
                 document.addEventListener('click', (e) => {
                     const toggleFavBtn = e.target.closest('[data-action="toggle-fav"]');
-                    if (toggleFavBtn) { DataManager.toggleFavorite(toggleFavBtn.getAttribute('data-id')); return; }
+                    if (toggleFavBtn) { 
+    DataManager.toggleFavorite(toggleFavBtn.getAttribute('data-id')); 
+    App.updateHeartIcon(toggleFavBtn);
+    return;
 
                     const openBtn = e.target.closest('[data-action="open-modal"]');
                     if (openBtn) { App.openModal(openBtn.getAttribute('data-id')); return; }
@@ -891,8 +894,9 @@
             },
 
             updateFavoritesUI: () => {
-                document.getElementById('fav-count').textContent = State.favorites.size;
-                if(State.filters.showFavorites) App.applyFilters();
+    document.getElementById('fav-count').textContent = State.favorites.size;
+    App.applyFilters();
+},
             },
 
             shareResource: async (id) => {
